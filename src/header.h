@@ -1,4 +1,7 @@
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /**
  * @brief BMP 文件头
@@ -10,6 +13,23 @@ typedef struct BMP_FILE_HEADER {
     uint16_t reserved2; // 保留，实际值因创建程序而异
     uint32_t offset;    // 从文件头到实际图像数据之间的偏移量
 } BMP_FILE_HEADER;
+
+/**
+ * @brief 读取 BMP 文件头
+ *
+ * @param fp BMP 文件指针
+ * @return BMP_FILE_HEADER* 返回读取到的 BMP 文件头结构体指针，
+ *                          若读取失败，则返回 NULL
+ */
+BMP_FILE_HEADER* read_bmp_file_header(FILE* fp);
+
+/**
+ * @brief 输出 BMP 文件头中的信息
+ *
+ * @param file_header BMP 文件头结构体
+ * @return int 若无错误则返回 0，否则返回 1
+ */
+int show_bmp_file_header(BMP_FILE_HEADER* file_header);
 
 /**
  * @brief 压缩方式
@@ -49,6 +69,25 @@ typedef struct BMP_INFO_HEADER {
     uint32_t colors_important; // 重要的颜色数；
                                // 为 0 时，表示都重要
 } BMP_INFO_HEADER;
+
+/**
+ * @brief 读取 BMP 信息头
+ *
+ * @param fp BMP 文件指针
+ * @return BMP_INFO_HEADER* 返回读取到的 BMP 信息头结构体指针，
+ *                          若读取失败，则返回 NULL
+ */
+BMP_INFO_HEADER* read_bmp_info_header(FILE* fp);
+
+/**
+ * @brief 输出 BMP 信息头中的信息
+ *
+ * @param file_header BMP 信息头结构体
+ * @return int 若无错误则返回 0，
+ *             若信息头大小不匹配则返回 1，
+ *             若压缩方式不识别则返回 2
+ */
+int show_bmp_info_header(BMP_INFO_HEADER* info_header);
 
 /**
  * @brief 字节类型

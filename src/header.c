@@ -1,35 +1,18 @@
 #include "header.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-int main(int argc, char* argv[]) {
-    // 检验参数数量
-    if (argc <= 1) {
-        printf("argc = %d, arguments not enough!\n", argc);
-        return 1;
-    } else if (argc >= 3) {
-        printf("argc = %d, arguments too many!\n", argc);
-        return 1;
-    }
-
-    // 查找参数指定的 BMP 文件
-    FILE* fp = fopen(argv[1], "r");
-    if (!fp) {
-        printf("File not found!\n");
-        return 1;
-    }
-
-    /* ========== BMP 文件头 ========== */
-
-    // 读取 BMP 文件头信息
+BMP_FILE_HEADER* read_bmp_file_header(FILE* fp) {
     BMP_FILE_HEADER* file_header = malloc(sizeof(BMP_FILE_HEADER));
+
     fread(&(file_header->type), sizeof(file_header->type), 1, fp);
     fread(&(file_header->size), sizeof(file_header->size), 1, fp);
     fread(&(file_header->reserved1), sizeof(file_header->reserved1), 1, fp);
     fread(&(file_header->reserved2), sizeof(file_header->reserved2), 1, fp);
     fread(&(file_header->offset), sizeof(file_header->offset), 1, fp);
 
+    return file_header;
+}
+
+int show_bmp_file_header(BMP_FILE_HEADER* file_header) {
     // 读取 BMP 文件类型
     char type_high = (char)file_header->type;
     char type_low  = (char)(file_header->type >> 8);
@@ -50,10 +33,12 @@ int main(int argc, char* argv[]) {
     // 读取文件大小
     printf("[File size(byte)]: %u\n", file_header->size);
 
-    /* ========== BMP 信息头 ========== */
+    return 0;
+}
 
-    // 读取 BMP 信息头
+BMP_INFO_HEADER* read_bmp_info_header(FILE* fp) {
     BMP_INFO_HEADER* info_header = malloc(sizeof(BMP_INFO_HEADER));
+
     fread(&(info_header->size), sizeof(info_header->size), 1, fp);
     fread(&(info_header->width), sizeof(info_header->width), 1, fp);
     fread(&(info_header->height), sizeof(info_header->height), 1, fp);
@@ -69,6 +54,10 @@ int main(int argc, char* argv[]) {
     fread(&(info_header->colors_important),
           sizeof(info_header->colors_important), 1, fp);
 
+    return info_header;
+}
+
+int show_bmp_info_header(BMP_INFO_HEADER* info_header) {
     // 验证信息头大小
     if (info_header->size != sizeof(BMP_INFO_HEADER)) {
         printf("Wrong info header size!\n");
@@ -125,7 +114,7 @@ int main(int argc, char* argv[]) {
         break;
     default:
         printf("Compression method not supported!\n");
-        return 1;
+        return 2;
     }
     printf("[Compression method]: %s\n", compression);
 

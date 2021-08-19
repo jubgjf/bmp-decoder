@@ -1,3 +1,8 @@
 project(bmp-decoder)
 
-add_executable(decoder decoder.c header.h)
+add_executable(
+    decoder
+    src/decoder.c
+    src/header.h
+    src/header.c
+)
