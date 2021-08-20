@@ -20,11 +20,11 @@ int show_bmp_file_header(BMP_FILE_HEADER* file_header) {
         printf("[File type]: BM (BMP for Windows 3.1x, 95, NT, ... etc)\n");
     } else {
         printf("Not a BMP file, or this BMP type not supported!\n");
-        if (type_high == 'B' && type_low == 'A' || // OS/2 struct Bitmap Array
-            type_high == 'C' && type_low == 'I' || // OS/2 struct Color Icon
-            type_high == 'C' && type_low == 'P' || // OS/2 const Color Pointer
-            type_high == 'I' && type_low == 'C' || // OS/2 struct Icon
-            type_high == 'P' && type_low == 'T') { // OS/2 Pointer
+        if ((type_high == 'B' && type_low == 'A') || // OS/2 struct Bitmap Array
+            (type_high == 'C' && type_low == 'I') || // OS/2 struct Color Icon
+            (type_high == 'C' && type_low == 'P') || // OS/2 const Color Pointer
+            (type_high == 'I' && type_low == 'C') || // OS/2 struct Icon
+            (type_high == 'P' && type_low == 'T')) { // OS/2 Pointer
             printf("Possible BMP type: %c%c\n", type_high, type_low);
         }
         return 1;
@@ -80,7 +80,7 @@ int show_bmp_info_header(BMP_INFO_HEADER* info_header) {
     printf("[Color depth]: %u\n", info_header->bit_count);
 
     // 压缩方式
-    char compression[20] = {0};
+    char compression[40] = {0};
     switch (info_header->compression) {
     case BI_RGB:
         strcpy(compression, "BI_RGB (no compression)");
