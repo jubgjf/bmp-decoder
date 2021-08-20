@@ -65,11 +65,15 @@ int main(int argc, char* argv[]) {
 
     // BMP 文件头
     BMP_FILE_HEADER* file_header = read_bmp_file_header(fp);
-    show_bmp_file_header(file_header);
+    if (show_bmp_file_header(file_header)) {
+        return 1;
+    }
 
     // BMP 信息头
     BMP_INFO_HEADER* info_header = read_bmp_info_header(fp);
-    show_bmp_info_header(info_header);
+    if (show_bmp_info_header(info_header)) {
+        return 1;
+    }
 
     return 0;
 }
