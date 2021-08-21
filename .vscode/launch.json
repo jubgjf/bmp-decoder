@@ -7,10 +7,22 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug",
+            "name": "Debug param 2",
             "program": "${workspaceFolder}/build/decoder",
             "args": [
                 "../example.bmp"
+            ],
+            "cwd": "${workspaceFolder}/build"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug param 4",
+            "program": "${workspaceFolder}/build/decoder",
+            "args": [
+                "../example.bmp",
+                "0",
+                "0"
             ],
             "cwd": "${workspaceFolder}/build"
         }

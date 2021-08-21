@@ -1,7 +1,8 @@
+#pragma once
+
+#include "def.h"
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 /**
  * @brief BMP 文件头
@@ -88,11 +89,6 @@ BMP_INFO_HEADER* read_bmp_info_header(FILE* fp);
  *             若压缩方式不识别则返回 2
  */
 int show_bmp_info_header(BMP_INFO_HEADER* info_header);
-
-/**
- * @brief 字节类型
- */
-typedef unsigned char byte_t;
 
 /**
  * @brief 调色板
