@@ -1,4 +1,6 @@
 #include "header.h"
+#include <stdlib.h>
+#include <string.h>
 
 BMP_FILE_HEADER* read_bmp_file_header(FILE* fp) {
     BMP_FILE_HEADER* file_header = malloc(sizeof(BMP_FILE_HEADER));
