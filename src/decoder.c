@@ -32,7 +32,7 @@ int check_arg_legal(int argc, char* argv[], FILE** fpp) {
     // 查找参数指定的 BMP 文件
     FILE* fp = fopen(argv[1], "r");
     if (!fp) {
-        fpp = NULL;
+        free(fp);
         return 3;
     }
     *fpp = fp;
@@ -40,6 +40,8 @@ int check_arg_legal(int argc, char* argv[], FILE** fpp) {
     // 检验坐标是否有负数
     if (argc == 4) {
         if (atoi(argv[2]) < 0 || atoi(argv[3]) < 0) {
+            free(fp);
+            *fpp = NULL;
             return 2;
         }
     }
@@ -64,23 +66,26 @@ int main(int argc, char* argv[]) {
         BMP_INFO_HEADER* info_header = read_bmp_info_header(fp);
 
         if (argc == 2) {
-            if (show_bmp_file_header(file_header)) {
-                return 1;
-            }
-
-            if (show_bmp_info_header(info_header)) {
+            if (show_bmp_file_header(file_header) ||
+                show_bmp_info_header(info_header)) {
+                free(file_header);
+                free(info_header);
                 return 1;
             }
 
             // TODO 暂不支持非 24 位位图
             if (info_header->bit_count != 24) {
                 printf("Color depth not supported yet!\n");
+                free(file_header);
+                free(info_header);
                 return 1;
             }
 
             // TODO 暂不支持调色板
             if (info_header->colors) {
                 printf("Color table not supported yet!\n");
+                free(file_header);
+                free(info_header);
                 return 1;
             }
         } else if (argc == 4) {
@@ -89,6 +94,8 @@ int main(int argc, char* argv[]) {
 
             if (show_pixel_info(info_header, fp, x, y)) {
                 printf("Please check the value of x and y!\n");
+                free(file_header);
+                free(info_header);
                 return 1;
             }
         }
